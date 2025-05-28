@@ -4,7 +4,7 @@ import requests
 st.title("Бесплатный переводчик на польский (LibreTranslate)")
 
 def translate_libre(text):
-    url = "https://libretranslate.de/translate"
+    url = "https://translate.argosopentech.com/translate"
     data = {
         "q": text,
         "source": "auto",
