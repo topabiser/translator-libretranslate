@@ -12,17 +12,20 @@ def translate_libre(text):
         "format": "text"
     }
     try:
-        response = requests.post(url, data=data)
+        response = requests.post(url, data=data, timeout=10)
         response.raise_for_status()
         return response.json()["translatedText"]
-    except Exception as e:
-        return f"Ошибка: {e}"
+    except requests.exceptions.Timeout:
+        return "Ошибка: сервер перевода не ответил (тайм-аут). Попробуйте позже."
+    except requests.exceptions.RequestException as e:
+        return f"Ошибка при подключении: {e}"
 
 text = st.text_area("Введите текст для перевода:")
 
 if st.button("Перевести"):
     if text.strip():
-        translation = translate_libre(text)
+        with st.spinner("Перевожу..."):
+            translation = translate_libre(text)
         st.subheader("Перевод:")
         st.write(translation)
     else:
